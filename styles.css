@@ -1,0 +1,217 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  header {
+    text-align: center;
+    padding: 2rem;
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+  }
+  
+  /* Container for the goal input and goal list */
+  .box {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+  }
+  
+  /* Form styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  input, select, button {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Goals list */
+  #goals-container {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #goals-container li {
+    background-color: #e4f5e0;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #goals-container li span {
+    font-weight: bold;
+  }
+  
+  /* Achievements Section */
+  #achievements-container {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #achievements-container li {
+    background-color: #f7f7f7;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #achievements-container li.earned {
+    background-color: #f4e1d2;
+    color: #6a4e2f;
+  }
+  
+  #achievements-container li.earned::before {
+    content: "🏆";
+    margin-right: 8px;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 2.5rem;
+    }
+  
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+  
+
+  /* Achievements Page Styles */
+  
+  #achievements-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+  
+  #achievements-list li {
+    list-style: none;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  #achievements-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Badge or Icon Styling (if you add an icon) */
+  #achievements-list li .icon {
+    font-size: 30px;
+    color: #4CAF50;
+    margin-bottom: 10px;
+  }
+  
+  /* Achievement Text Styling */
+  #achievements-list li p {
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  /* Achievement Status (if you add status indicators) */
+  .completed {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  
+  /* Achievements Container Styling */
+  #achievements-container {
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* General styles for navigation */
+.top-nav {
+    text-align: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .nav-link {
+    font-size: 18px;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .nav-link:hover {
+    color: #4CAF50;
+  }
+
+  .goal.incomplete {
+    color: gray;
+  }
+  
+  .goal .completed {
+    text-decoration: line-through;
+    color: white;
+  }

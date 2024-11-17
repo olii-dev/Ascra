@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ascra - Achievement Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="index.html" class="nav-link">Home</a> | 
+    <a href="achievements.html" class="nav-link">Achievements</a>
+  </div>
+
+  <!-- Header Section -->
+  <header>
+    <h1>Ascra</h1>
+    <p>Your <b>personal</b> hub to track and achieve goals!</p>
+  </header>
+
+  <!-- Goal Input Section -->
+  <section id="goal-input" class="box">
+    <h2>Create a Goal</h2>
+    <form id="goal-form">
+        <label for="goal-title">Goal:</label>
+        <input type="text" id="goal-title" placeholder="e.g., Do the dishes" required />
+        
+        <label for="goal-type">Type:</label>
+        <select id="goal-type" required>
+          <option value="short-term">Short-Term</option>
+          <option value="medium-term">Medium-Term</option>
+          <option value="long-term">Long-Term</option>
+        </select>
+        
+        <label for="goal-deadline">Deadline:</label>
+        <input type="date" id="goal-deadline" />
+        
+        <button type="submit">Create Goal</button>
+      </form>      
+  </section>
+
+  <!-- Goals List Section -->
+  <section id="goals-list" class="box">
+    <h2>Your Goals</h2>
+    <ul id="goals-container"></ul>
+  </section>
+
+  <!-- JavaScript -->
+  <script src="scripts/script.js"></script>
+</body>
+</html>
