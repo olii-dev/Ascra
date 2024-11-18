@@ -3,6 +3,7 @@ let goals = [];
 let goalsCreated = 0;
 let goalsCompleted = 0;
 let firstGoalCompleted = false;
+let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
 
 // Function to load stored goals from localStorage
 function loadGoals() {
@@ -20,29 +21,30 @@ function saveGoals() {
   localStorage.setItem('goals', JSON.stringify(goals));
 }
 
-// Function to render goals on the page
-function renderGoals() {
-  const goalsContainer = document.getElementById('goals-container');
-  goalsContainer.innerHTML = '';
-
-  goals.forEach((goal, index) => {
-    const goalItem = document.createElement('li');
-    goalItem.classList.add('goal');
-    goalItem.innerHTML = `
-      <span class="${goal.completed ? 'completed' : ''}">${goal.title}</span>
-      <button onclick="toggleGoalCompletion(${index})">${goal.completed ? 'Undo' : 'Complete'}</button>
-      <button onclick="deleteGoal(${index})">Delete</button>
-    `;
-    goalsContainer.appendChild(goalItem);
-  });
-}
-
-// Function to toggle the completion status of a goal
+// Function to toggle goal completion
 function toggleGoalCompletion(index) {
-  goals[index].completed = !goals[index].completed;
+  const goal = goals[index];
+  goal.completed = !goal.completed;
+
+  // Add or remove the completed date
+  if (goal.completed) {
+    goal.completedDate = new Date().toISOString();
+  } else {
+    delete goal.completedDate;
+  }
+
   saveGoals();
   renderGoals();
   checkAchievements();
+  checkConsistencyChamp();
+}
+
+// Function to confirm and delete a goal
+function confirmDeleteGoal(index) {
+  const confirmDelete = window.confirm('Are you sure you want to delete this goal?');
+  if (confirmDelete) {
+    deleteGoal(index);
+  }
 }
 
 // Function to delete a goal
@@ -52,6 +54,7 @@ function deleteGoal(index) {
   saveGoals();
   renderGoals();
   checkAchievements();
+  checkConsistencyChamp();
 }
 
 // Function to check achievements based on created and completed goals
@@ -76,10 +79,46 @@ function checkAchievements() {
   }
 }
 
+// Function to track daily completions and check for Consistency Champ achievement
+function checkConsistencyChamp() {
+  const today = new Date().toDateString();
+  let completionHistory = JSON.parse(localStorage.getItem('completionHistory')) || {};
+
+  // Update completion history for today
+  if (!completionHistory[today]) {
+    const completedGoalsToday = goals.filter(goal => goal.completed && new Date(goal.completedDate).toDateString() === today).length;
+
+    if (completedGoalsToday > 0) {
+      completionHistory[today] = true;
+      localStorage.setItem('completionHistory', JSON.stringify(completionHistory));
+    }
+  }
+
+  // Check if there are 7 consecutive days of completions
+  const dates = Object.keys(completionHistory).sort((a, b) => new Date(a) - new Date(b)); // Sort dates in ascending order
+  let streak = 1;
+
+  for (let i = 1; i < dates.length; i++) {
+    const currentDate = new Date(dates[i]);
+    const previousDate = new Date(dates[i - 1]);
+
+    if ((currentDate - previousDate) === 86400000) { // Check if consecutive days
+      streak++;
+    } else {
+      streak = 1; // Reset streak if not consecutive
+    }
+
+    if (streak >= 7) break;
+  }
+
+  // Unlock the achievement if conditions are met
+  if (streak >= 7 && !achievements.includes('Consistency Champ 📅')) {
+    unlockAchievement('Consistency Champ 📅');
+  }
+}
+
 // Function to unlock and store an achievement
 function unlockAchievement(achievementText) {
-  let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-
   if (!achievements.includes(achievementText)) {
     achievements.push(achievementText);
     localStorage.setItem('achievements', JSON.stringify(achievements));
@@ -87,17 +126,15 @@ function unlockAchievement(achievementText) {
   }
 }
 
-// Function to render achievements on the page
+// Function to render achievements
 function renderAchievements() {
-  const achievementsContainer = document.getElementById('achievements-list');
-  const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-
+  const achievementsContainer = document.getElementById('achievements-container');
   achievementsContainer.innerHTML = '';
 
   achievements.forEach(achievement => {
     const achievementItem = document.createElement('li');
-    achievementItem.classList.add('earned');
-    achievementItem.innerHTML = `<span>🏆 ${achievement}</span>`;
+    achievementItem.classList.add('achievement');
+    achievementItem.textContent = achievement;
     achievementsContainer.appendChild(achievementItem);
   });
 }
@@ -107,7 +144,7 @@ function createGoal(title, type, deadline) {
   const goal = {
     title,
     type,
-    deadline: deadline || 'No deadline',
+    deadline: deadline || 'No deadline',  // Default to 'No deadline' if none is provided
     completed: false,
   };
   goals.push(goal);
@@ -134,5 +171,37 @@ goalForm.addEventListener('submit', function (event) {
   }
 });
 
+// Function to render goals on the page
+function renderGoals() {
+  const goalsContainer = document.getElementById('goals-container');
+  goalsContainer.innerHTML = '';
+
+  goals.forEach((goal, index) => {
+    const goalItem = document.createElement('li');
+    goalItem.classList.add('goal');
+    
+    // Check if there is a deadline and format it accordingly
+    const deadlineText = goal.deadline !== 'No deadline' ? `${goal.deadline}` : '';
+    
+    goalItem.innerHTML = `
+      <span class="${goal.completed ? 'completed' : ''}">${goal.title}</span>
+      <span class="goal-deadline">${deadlineText}</span>
+      <button onclick="toggleGoalCompletion(${index})">${goal.completed ? 'Undo' : 'Complete'}</button>
+      <button onclick="confirmDeleteGoal(${index})">Delete</button>
+    `;
+    goalsContainer.appendChild(goalItem);
+  });
+}
+
 // Initial load of goals and achievements
 loadGoals();
+
+// Utility function to format dates
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear()).slice(-2);
+
+  return `${day}/${month}/${year}`;
+}
