@@ -4,6 +4,13 @@ let goalsCreated = 0;
 let goalsCompleted = 0;
 let firstGoalCompleted = false;
 let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+let achievementDescriptions = {
+  '1st Goal Complete! 🎉': 'You completed your first goal! Great start!',
+  'Goal Setter 🎯': 'You set your first 5 goals. Keep it up!',
+  'Milestone Master 🏅': 'You completed 5 goals. You\'re making progress!',
+  'Pro Goal Getter 🌟': 'You completed 10 goals! You\'re a pro!',
+  'Consistency Champ 📅': 'You completed goals for 7 consecutive days. Amazing consistency!',
+};
 
 // Function to load stored goals from localStorage
 function loadGoals() {
@@ -134,7 +141,15 @@ function renderAchievements() {
   achievements.forEach(achievement => {
     const achievementItem = document.createElement('li');
     achievementItem.classList.add('achievement');
-    achievementItem.textContent = achievement;
+    
+    // Fetch the description for the achievement
+    const description = achievementDescriptions[achievement] || 'No description available';
+    
+    achievementItem.innerHTML = `
+      <span class="achievement-name">${achievement}</span>
+      <p class="achievement-description">${description}</p>
+    `;
+    
     achievementsContainer.appendChild(achievementItem);
   });
 }

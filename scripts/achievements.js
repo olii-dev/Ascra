@@ -35,7 +35,7 @@ function renderAchievements() {
       achievementsList.appendChild(achievementItem);
     });
   } else {
-    achievementsList.innerHTML = '<li>No achievements yet!</li>';
+    achievementsList.innerHTML = '<li>No achievements earned yet! Check out the GitHub to learn about them!</li>';
   }
 }
 
@@ -100,15 +100,113 @@ checkProGoalGetter();
 // Call renderAchievements when the page is ready
 renderAchievements();
 
-// Check if there are goals with deadlines (example check)
-function checkGoalsWithDeadlines() {
-    const goals = JSON.parse(localStorage.getItem('goals')) || [];
-    const goalsWithDeadlines = goals.filter(goal => goal.deadline !== 'No deadline');
-  
-    if (goalsWithDeadlines.length >= 1 && !achievements.includes('Deadline Master 🕓')) {
-      addAchievement('Deadline Master 🕓');
+// Unlock 'Goal Marathoner' after completing 50 goals
+function checkGoalMarathoner() {
+  const completedGoals = JSON.parse(localStorage.getItem('goals'))?.filter(goal => goal.completed) || [];
+  if (completedGoals.length >= 50 && !achievements.includes('Goal Marathoner 🏃‍♂️')) {
+    addAchievement('Goal Marathoner 🏃‍♂️');
+  }
+}
+
+// Unlock 'Master Planner' after adding a deadline to 20 goals
+function checkMasterPlanner() {
+  const goalsWithDeadlines = JSON.parse(localStorage.getItem('goals'))?.filter(goal => goal.deadline !== 'No deadline') || [];
+  if (goalsWithDeadlines.length >= 20 && !achievements.includes('Master Planner 🗓️')) {
+    addAchievement('Master Planner 🗓️');
+  }
+}
+
+// Unlock 'Back-to-Back Goals' after completing goals for 7 consecutive days
+function checkBackToBackGoals() {
+  const today = new Date().toDateString();
+  let completionHistory = JSON.parse(localStorage.getItem('completionHistory')) || {};
+
+  if (!completionHistory[today]) {
+    const completedGoalsToday = goals.filter(goal => goal.completed && new Date(goal.completedDate).toDateString() === today).length;
+
+    if (completedGoalsToday > 0) {
+      completionHistory[today] = true;
+      localStorage.setItem('completionHistory', JSON.stringify(completionHistory));
     }
   }
-  
-  // Call check on page load
-  checkGoalsWithDeadlines();
+
+  const dates = Object.keys(completionHistory).sort((a, b) => new Date(a) - new Date(b)); // Sort dates in ascending order
+  let streak = 1;
+
+  for (let i = 1; i < dates.length; i++) {
+    const currentDate = new Date(dates[i]);
+    const previousDate = new Date(dates[i - 1]);
+
+    if ((currentDate - previousDate) === 86400000) { // Check if consecutive days
+      streak++;
+    } else {
+      streak = 1; // Reset streak if not consecutive
+    }
+
+    if (streak >= 7) break;
+  }
+
+  if (streak >= 7 && !achievements.includes('Back-to-Back Goals 🔄')) {
+    addAchievement('Back-to-Back Goals 🔄');
+  }
+}
+
+// Unlock 'Goal Pacer' after completing goals for 30 consecutive days
+function checkGoalPacer() {
+  const today = new Date().toDateString();
+  let completionHistory = JSON.parse(localStorage.getItem('completionHistory')) || {};
+
+  if (!completionHistory[today]) {
+    const completedGoalsToday = goals.filter(goal => goal.completed && new Date(goal.completedDate).toDateString() === today).length;
+
+    if (completedGoalsToday > 0) {
+      completionHistory[today] = true;
+      localStorage.setItem('completionHistory', JSON.stringify(completionHistory));
+    }
+  }
+
+  const dates = Object.keys(completionHistory).sort((a, b) => new Date(a) - new Date(b)); // Sort dates in ascending order
+  let streak = 1;
+
+  for (let i = 1; i < dates.length; i++) {
+    const currentDate = new Date(dates[i]);
+    const previousDate = new Date(dates[i - 1]);
+
+    if ((currentDate - previousDate) === 86400000) { // Check if consecutive days
+      streak++;
+    } else {
+      streak = 1; // Reset streak if not consecutive
+    }
+
+    if (streak >= 30) break;
+  }
+
+  if (streak >= 30 && !achievements.includes('Goal Pacer 🏃‍♀️')) {
+    addAchievement('Goal Pacer 🏃‍♀️');
+  }
+}
+
+// Unlock 'Goal Tracker' after tracking goals for 30 days
+function checkGoalTracker() {
+  const datesTracked = Object.keys(JSON.parse(localStorage.getItem('completionHistory')) || {});
+  if (datesTracked.length >= 30 && !achievements.includes('Goal Tracker 📊')) {
+    addAchievement('Goal Tracker 📊');
+  }
+}
+
+// Unlock 'Deadline King/Queen' after 10 goals with deadlines
+function checkDeadlineKing() {
+  const goalsWithDeadlines = JSON.parse(localStorage.getItem('goals'))?.filter(goal => goal.deadline !== 'No deadline') || [];
+  if (goalsWithDeadlines.length >= 10 && !achievements.includes('Deadline King/Queen 👑')) {
+    addAchievement('Deadline King/Queen 👑');
+  }
+}
+
+// Call new check functions
+checkFirstGoalCreation();
+checkGoalMarathoner();
+checkMasterPlanner();
+checkBackToBackGoals();
+checkGoalPacer();
+checkGoalTracker();
+checkDeadlineKing();

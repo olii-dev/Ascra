@@ -114,14 +114,28 @@ button:hover {
   margin-right: 8px;
 }
 
+.achievement-description {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  font-weight: normal;
+}
+
+.achievement-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
   header h1 {
-      font-size: 2.5rem;
+    font-size: 2.5rem;
   }
 
   h2 {
-      font-size: 1.4rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -177,18 +191,17 @@ button:hover {
 
 /* General styles for navigation */
 .top-nav {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
-  background-color: #f4f4f4;
-  border-bottom: 2px solid #ddd;
 }
 
 .nav-link {
-  font-size: 18px;
   text-decoration: none;
-  color: #333;
-  padding: 10px;
-  cursor: pointer;
+  margin: 0 10px;
+  font-weight: bold;
+  color: #000;
 }
 
 .nav-link:hover {
@@ -240,4 +253,49 @@ button {
 
 .goal span {
   margin-right: 10px;
+}
+
+.achievements-info {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.achievements-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Achievement Box */
+.achievement-box {
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.achievement-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.achievement-box p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.achievement-description {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 10px;
+  font-weight: normal;
 }
